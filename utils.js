@@ -3,4 +3,6 @@ export const eventTypes = {
   valueChanged: 'valueChanged',
   languageChanged: 'languageChanged',
   themeChanged: 'themeChanged',
+  readOnlyChanged: 'readOnlyChanged',
+  automaticLayoutChanged: 'automaticLayoutChanged',
 };

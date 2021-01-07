@@ -7,6 +7,8 @@ const eventTypes = {
   valueChanged: 'valueChanged',
   languageChanged: 'languageChanged',
   themeChanged: 'themeChanged',
+  readOnlyChanged: 'readOnlyChanged',
+  automaticLayoutChanged: 'automaticLayoutChanged',
 };
 
 class MonacoEditor {
@@ -16,6 +18,8 @@ class MonacoEditor {
     this.editor = null;
     this.setupEventListener('message', this.handleMessage.bind(this));
     this.setupEditor();
+    this.readOnly = false;
+    this.automaticLayout = true;
   }
 
   setupEditor() {
@@ -27,7 +31,9 @@ class MonacoEditor {
         scrollBeyondLastLine: false,
         minimap: {
           enabled: false
-        }
+        },
+        readOnly: this.readOnly,
+        automaticLayout: this.automaticLayout
       });
 
       const model = this.editor.getModel();
@@ -58,6 +64,12 @@ class MonacoEditor {
         break;
       case eventTypes.themeChanged:
         this.onThemeChanged(data.payload);
+        break;
+      case eventTypes.readOnlyChanged:
+        this.onReadOnlyChanged(data.payload);
+        break;
+      case eventTypes.automaticLayoutChanged:
+        this.onAutomaticLayoutChanged(data.payload);
         break;
       default:
         break;
@@ -108,6 +120,15 @@ class MonacoEditor {
 
   onThemeChanged(newValue) {
     monaco.editor.setTheme(newValue);
+  }
+
+  onReadOnlyChanged(newValue) {
+    console.warn('READONLY', newValue);
+    this.editor.updateOptions({ readOnly: newValue })
+  }
+
+  onAutomaticLayoutChanged(newValue) {
+    this.editor.updateOptions({ automaticLayout: newValue })
   }
 }
 

@@ -60,6 +60,16 @@ class MonacoElement extends PolymerElement {
         type: String,
         value: 'node_modules/monaco-editor/min/vs',
       },
+      readOnly: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      automaticLayout: {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      }
     };
   }
 
@@ -126,6 +136,8 @@ class MonacoElement extends PolymerElement {
     this.monacoValueChanged(this.value);
     this.monacoLanguageChanged(this.language);
     this.monacoThemeChanged(this.theme);
+    this.monacoReadOnlyChanged(this.readOnly)
+    this.monacoAutomaticLayoutChanged(this.automaticLayout)
   }
 
   monacoValueChanged(value) {
@@ -138,6 +150,14 @@ class MonacoElement extends PolymerElement {
 
   monacoThemeChanged(value) {
     this.postMessage(eventTypes.themeChanged, value);
+  }
+
+  monacoReadOnlyChanged(value) {
+    this.postMessage(eventTypes.readOnlyChanged, value);
+  }
+
+  monacoAutomaticLayoutChanged(value) {
+    this.postMessage(eventTypes.automaticLayoutChanged, value);
   }
 
   postMessage(event, payload) {
