@@ -123,7 +123,6 @@ class MonacoEditor {
   }
 
   onReadOnlyChanged(newValue) {
-    console.warn('READONLY', newValue);
     this.editor.updateOptions({ readOnly: newValue })
   }
 
