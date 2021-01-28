@@ -77,7 +77,8 @@ class MonacoElement extends PolymerElement {
       },
       loading: {
         type: Boolean,
-        value: true
+        value: true,
+        notify: true
       }
     };
   }
