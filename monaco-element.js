@@ -35,12 +35,17 @@ class MonacoElement extends PolymerElement {
           padding: 0;
         }
       </style>
+      <slot name="loader" hidden$="[[!loading]]"></slot>
       <iframe id="iframe"></iframe>
     `;
   }
 
   static get properties() {
     return {
+      name: {
+        type: String,
+        value: '',
+      },
       value: {
         type: String,
         value: '',
@@ -69,6 +74,11 @@ class MonacoElement extends PolymerElement {
         type: Boolean,
         value: true,
         reflectToAttribute: true
+      },
+      loading: {
+        type: Boolean,
+        value: true,
+        notify: true
       }
     };
   }
@@ -82,31 +92,32 @@ class MonacoElement extends PolymerElement {
 
     this.initIFrame();
 
-    window.addEventListener('message', message => {
-      this.handleMessage(message);
-    });
+    window.addEventListener('message', this.messageHandler);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('message', message => {
-      this.handleMessage(message);
-    });
+    window.removeEventListener('message',this.messageHandler);
   }
 
   initIFrame() {
     this.iframe = this.shadowRoot.querySelector('#iframe');
-    const div = this.document.createElement('div');
-    div.id = 'container';
-    this.document.body.appendChild(div);
+    this.iframe.onload = (e) => {
+      const div = this.document.createElement('div');
+      div.id = 'container';
+      this.document.body.appendChild(div);
+      this.insertScriptElement({
+        src: `${this.libPath}/loader.js`,
+        onload: () => {
+          this.insertScriptElement({ text: iframeScript });
+          this.insertStyle();
+        },
+      });
+    };
+  }
 
-    this.insertScriptElement({
-      src: `${this.libPath}/loader.js`,
-      onload: () => {
-        this.insertScriptElement({ text: iframeScript });
-        this.insertStyle();
-      },
-    });
+  messageHandler = (message) => {
+    this.handleMessage(message);
   }
 
   handleMessage(message) {
@@ -125,7 +136,7 @@ class MonacoElement extends PolymerElement {
   _handleMessage(data) {
     if (data.event === eventTypes.valueChanged) {
       this.dispatchEvent(
-        new CustomEvent('value-changed', { detail: data.payload })
+        new CustomEvent('value-changed', { detail: {value: data.payload, name: this.name }})
       );
     } else if (data.event === eventTypes.ready) {
       this.onIFrameReady();
@@ -138,6 +149,8 @@ class MonacoElement extends PolymerElement {
     this.monacoThemeChanged(this.theme);
     this.monacoReadOnlyChanged(this.readOnly)
     this.monacoAutomaticLayoutChanged(this.automaticLayout)
+
+    this.loading = false;
   }
 
   monacoValueChanged(value) {
@@ -184,7 +197,7 @@ class MonacoElement extends PolymerElement {
       height: 100vh;
       overflow: hidden;
       margin: 0;
-    }    
+    }
     #container {
       width: 100%;
       height: 100%;
