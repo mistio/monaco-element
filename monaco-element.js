@@ -68,7 +68,8 @@ class MonacoElement extends PolymerElement {
       readOnly: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: "monacoReadOnlyChanged"
       },
       automaticLayout: {
         type: Boolean,
