@@ -117,7 +117,7 @@ class MonacoElement extends PolymerElement {
       }
       this._handleMessage(data);
     } catch (error) {
-      console.error('[monaco-element] Error while parsing message:', error);
+      //console.error('[monaco-element] Error while parsing message:', error);
       return;
     }
   }
@@ -184,7 +184,7 @@ class MonacoElement extends PolymerElement {
       height: 100vh;
       overflow: hidden;
       margin: 0;
-    }    
+    }
     #container {
       width: 100%;
       height: 100%;

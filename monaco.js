@@ -105,7 +105,7 @@ class MonacoEditor {
       this.editor.getModel().setValue(newValue);
       this.postMessage(eventTypes.valueChanged, newValue);
     }
-  } 
+  }
 
   onValueChanged(newValue) {
     if (newValue !== this.value) {
@@ -115,11 +115,15 @@ class MonacoEditor {
   }
 
   onLanguageChanged(newLang) {
-    monaco.editor.setModelLanguage(this.editor.getModel(), newLang);
+    if (monaco) {
+      monaco.editor.setModelLanguage(this.editor.getModel(), newLang);
+    }
   }
 
   onThemeChanged(newValue) {
-    monaco.editor.setTheme(newValue);
+    if (monaco) {
+      monaco.editor.setTheme(newValue);
+    }
   }
 
   onReadOnlyChanged(newValue) {
