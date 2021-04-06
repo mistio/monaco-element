@@ -118,7 +118,9 @@ class MonacoElement extends PolymerElement {
   }
 
   messageHandler = (message) => {
-    this.handleMessage(message);
+    if (window.location.href.includes(message.origin)) {
+      this.handleMessage(message);
+    }
   }
 
   handleMessage(message) {
@@ -129,7 +131,7 @@ class MonacoElement extends PolymerElement {
       }
       this._handleMessage(data);
     } catch (error) {
-      console.error('[monaco-element] Error while parsing message:', error);
+      // console.error('[monaco-element] Error while parsing message:', error);
       return;
     }
   }
