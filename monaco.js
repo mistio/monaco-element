@@ -115,17 +115,16 @@ class MonacoEditor {
   }
 
   onLanguageChanged(newLang) {
-    if (monaco) {
+    if (typeof(monaco) != 'undefined') {
       monaco.editor.setModelLanguage(this.editor.getModel(), newLang);
     }
   }
 
   onThemeChanged(newValue) {
-    if (monaco) {
+    if (typeof(monaco) != 'undefined') {
       monaco.editor.setTheme(newValue);
     }
   }
-
   onReadOnlyChanged(newValue) {
     this.editor.updateOptions({ readOnly: newValue })
   }
