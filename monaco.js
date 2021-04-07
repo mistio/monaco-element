@@ -81,7 +81,7 @@ class MonacoEditor {
       const data = JSON.parse(message.data);
       this._handleMessage(data);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       return;
     }
   }
