@@ -100,7 +100,7 @@ class MonacoEditor {
   }
 
   onInputValueChanged(newValue) {
-    if (newValue !== this.value) {
+    if (newValue !== this.value && this.editor) {
       this.value = newValue;
       this.editor.getModel().setValue(newValue);
       this.postMessage(eventTypes.valueChanged, newValue);
@@ -115,7 +115,7 @@ class MonacoEditor {
   }
 
   onLanguageChanged(newLang) {
-    if (typeof(monaco) != 'undefined') {
+    if (typeof(monaco) != 'undefined' && this.editor) {
       monaco.editor.setModelLanguage(this.editor.getModel(), newLang);
     }
   }
@@ -127,11 +127,15 @@ class MonacoEditor {
   }
 
   onReadOnlyChanged(newValue) {
-    this.editor.updateOptions({ readOnly: newValue })
+    if (this.editor) {
+      this.editor.updateOptions({ readOnly: newValue })
+    }
   }
 
   onAutomaticLayoutChanged(newValue) {
-    this.editor.updateOptions({ automaticLayout: newValue })
+    if (this.editor) {
+      this.editor.updateOptions({ automaticLayout: newValue })
+    }
   }
 }
 
