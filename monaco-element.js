@@ -117,7 +117,7 @@ class MonacoElement extends PolymerElement {
     };
   }
 
-  messageHandler = (message) => {
+  messageHandler(message) {
     if (window.location.href.includes(message.origin)) {
       this.handleMessage(message);
     }
